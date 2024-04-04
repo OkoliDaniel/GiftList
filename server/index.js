@@ -6,16 +6,16 @@ const port = 1225;
 const app = express();
 app.use(express.json());
 
-// TODO: hardcode a merkle root here representing the whole nice list
-// paste the hex string in here, without the 0x prefix
-const MERKLE_ROOT = '';
+const MERKLE_ROOT = 'ddd59a2ffccddd60ff47993312821cd57cf30f7f14fb82937ebe2c4dc78375aa';
 
 app.post('/gift', (req, res) => {
-  // grab the parameters from the front-end here
+  // grab the parameters from the client here.
   const body = req.body;
+  const proof = body.proof;
+  const name = body.name;
 
-  // TODO: prove that a name is in the list 
-  const isInTheList = false;
+  // send the result of the verification to the client.
+  const isInTheList = verifyProof(proof, name, MERKLE_ROOT);
   if(isInTheList) {
     res.send("You got a toy robot!");
   }
@@ -24,6 +24,7 @@ app.post('/gift', (req, res) => {
   }
 });
 
+// start the server.
 app.listen(port, () => {
   console.log(`Listening on port ${port}!`);
 });
